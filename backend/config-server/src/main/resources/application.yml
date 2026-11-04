@@ -1,0 +1,28 @@
+server:
+  port: ${SERVER_PORT:8888}
+spring:
+  application:
+    name: config-server
+  profiles:
+    active: git
+  cloud:
+    config:
+      server:
+        git:
+          # Run from backend/config-server; sibling repository is backend/config-repo.
+          uri: ${CONFIG_GIT_URI:file:../config-repo}
+          default-label: main
+          clone-on-start: true
+          timeout: 10
+          force-pull: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+logging:
+  level:
+    org.springframework.cloud.config: INFO
