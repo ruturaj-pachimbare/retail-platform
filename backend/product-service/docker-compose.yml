@@ -1,0 +1,15 @@
+services:
+  product-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: retail-product-db
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+      MSSQL_SA_PASSWORD: "RetailDev_Passw0rd!"
+    ports:
+      - "1433:1433"
+    volumes:
+      - product_db_data:/var/opt/mssql
+
+volumes:
+  product_db_data:
