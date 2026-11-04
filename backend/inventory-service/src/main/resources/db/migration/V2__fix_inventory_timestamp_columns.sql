@@ -1,0 +1,5 @@
+ALTER TABLE inventory_items
+ALTER COLUMN created_at DATETIMEOFFSET(6) NOT NULL;
+
+ALTER TABLE inventory_items
+ALTER COLUMN updated_at DATETIMEOFFSET(6) NOT NULL;
