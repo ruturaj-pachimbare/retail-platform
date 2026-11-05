@@ -5,6 +5,11 @@ server:
 spring:
   application:
     name: api-gateway
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTH_ISSUER_URI:http://localhost:8085}
   # Config Server is optional at startup because this module also contains
   # working local defaults below. Set CONFIG_SERVER_URL if it runs elsewhere.
   config:
