@@ -1,0 +1,30 @@
+server:
+  port: ${SERVER_PORT:8761}
+
+spring:
+  application:
+    name: discovery-server
+
+# This application is the Eureka registry itself, so it must not register
+# with another Eureka server or fetch a registry from one.
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+  server:
+    wait-time-in-ms-when-sync-empty: 0
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+info:
+  app:
+    name: ${spring.application.name}
+    description: TechZone Retail Platform service discovery server
+    version: 0.0.1-SNAPSHOT
