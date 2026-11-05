@@ -1,0 +1,12 @@
+<section class="page">
+  <h1>Shopping Cart</h1>
+  <div class="empty" *ngIf="cart.lines().length===0"><p>Your cart is empty.</p><a routerLink="/products">Browse products</a></div>
+  <div class="cart-list" *ngIf="cart.lines().length">
+    <article class="cart-line" *ngFor="let line of cart.lines()">
+      <div><h3>{{ line.product.name }}</h3><p>{{ line.product.sku }}</p><strong>{{ line.product.price | currency:'INR':'symbol':'1.2-2' }}</strong></div>
+      <div class="qty"><button (click)="update(line.product.id,line.quantity-1)">−</button><span>{{ line.quantity }}</span><button (click)="update(line.product.id,line.quantity+1)">+</button></div>
+      <button class="remove" (click)="remove(line.product.id)">Remove</button>
+    </article>
+    <div class="total"><strong>Total: {{ cart.total() | currency:'INR':'symbol':'1.2-2' }}</strong><a class="button" routerLink="/orders">Continue to orders</a></div>
+  </div>
+</section>

@@ -1,0 +1,12 @@
+<section class="page">
+  <a routerLink="/products">← Back to products</a>
+  <p class="error" *ngIf="error">{{ error }}</p>
+  <article class="detail" *ngIf="product">
+    <span class="tag">{{ product.category }}</span>
+    <h1>{{ product.name }}</h1>
+    <p>{{ product.description }}</p>
+    <p>SKU: {{ product.sku }}</p>
+    <h2>{{ product.price | currency:'INR':'symbol':'1.2-2' }}</h2>
+    <button (click)="add()" [disabled]="!product.active">Add to cart</button>
+  </article>
+</section>

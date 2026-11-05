@@ -1,0 +1,29 @@
+<section class="page">
+  <div class="page-heading">
+    <div><h1>Products</h1><p>Browse products available in TechZone Retail.</p></div>
+    <a class="button secondary" routerLink="/cart">View cart ({{ cartCount }})</a>
+  </div>
+
+  <div class="toolbar">
+    <input [(ngModel)]="search" placeholder="Search by product name..." (keyup.enter)="load()">
+    <button (click)="load()">Search</button>
+  </div>
+
+  <p class="muted" *ngIf="loading">Loading products...</p>
+  <p class="error" *ngIf="error">{{ error }}</p>
+
+  <div class="product-grid" *ngIf="!loading">
+    <article class="product-card" *ngFor="let product of products">
+      <div class="product-symbol">▦</div>
+      <span class="tag">{{ product.category }}</span>
+      <h3>{{ product.name }}</h3>
+      <p>{{ product.description || 'No description available.' }}</p>
+      <div class="sku">SKU: {{ product.sku }}</div>
+      <div class="product-bottom">
+        <strong>{{ product.price | currency:'INR':'symbol':'1.2-2' }}</strong>
+        <button (click)="addToCart(product)" [disabled]="!product.active">Add to cart</button>
+      </div>
+    </article>
+  </div>
+  <p class="muted" *ngIf="!loading && !error && products.length === 0">No products found.</p>
+</section>

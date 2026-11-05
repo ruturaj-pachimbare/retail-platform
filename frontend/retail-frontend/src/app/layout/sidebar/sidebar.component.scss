@@ -1,0 +1,30 @@
+
+.sidebar {
+  width: 240px;
+  min-width: 240px;
+  min-height: calc(100vh - 64px);
+  background: #fff;
+  border-right: 1px solid #e5e7eb;
+  padding-top: 16px;
+}
+
+.sidebar-heading {
+  padding: 12px 24px;
+  color: #777;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.active-link {
+  background: #e8eaf6;
+  color: #303f9f;
+  border-right: 3px solid #3f51b5;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 180px;
+    min-width: 180px;
+  }
+}

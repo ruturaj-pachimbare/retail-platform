@@ -1,0 +1,6 @@
+<section class="page"><h1>Notifications</h1><p>Order event updates.</p>
+<p *ngIf="loading">Loading notifications...</p><p class="error" *ngIf="error">{{ error }}</p>
+<div class="notification-list"><article *ngFor="let item of notifications"><div class="dot"></div><div>
+<strong>{{ item.eventType || 'Order update' }}</strong><p>{{ item.message || ('Update for order #' + item.orderId) }}</p>
+<small>Order #{{ item.orderId }} · Customer #{{ item.customerId }} · {{ item.createdAt ? (item.createdAt | date:'medium') : 'Recently' }}</small>
+</div></article><p *ngIf="!loading && !error && notifications.length===0">No notifications yet.</p></div></section>

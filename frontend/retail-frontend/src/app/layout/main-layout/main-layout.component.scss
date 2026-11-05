@@ -1,0 +1,12 @@
+
+.app-container {
+  display: flex;
+  min-height: calc(100vh - 64px);
+}
+
+.main-content {
+  flex: 1;
+  padding: 24px;
+  background: #f5f6fa;
+  overflow-x: auto;
+}

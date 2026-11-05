@@ -1,0 +1,16 @@
+<section class="page">
+  <h1>Inventory</h1><p>Current stock levels by product.</p>
+  <p *ngIf="loading">Loading inventory...</p>
+  <p class="error" *ngIf="error">{{ error }}</p>
+  <div class="table-wrap" *ngIf="!loading && !error">
+    <table><thead><tr><th>Product ID</th><th>SKU</th><th>On hand</th><th>Reserved</th><th>Available</th><th>Stock status</th></tr></thead>
+      <tbody><tr *ngFor="let item of items">
+        <td>{{ item.productId }}</td><td>{{ item.sku || '—' }}</td>
+        <td>{{ item.quantityOnHand ?? '—' }}</td><td>{{ item.quantityReserved ?? '—' }}</td>
+        <td>{{ item.availableQuantity }}</td>
+        <td><span [class.low]="item.availableQuantity <= 5" class="status">{{ item.availableQuantity <= 5 ? 'Low stock' : 'In stock' }}</span></td>
+      </tr></tbody>
+    </table>
+    <p *ngIf="items.length===0">No inventory records found.</p>
+  </div>
+</section>

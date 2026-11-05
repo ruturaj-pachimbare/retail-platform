@@ -1,0 +1,118 @@
+<section class="dashboard">
+
+  <div class="dashboard-heading">
+    <div>
+      <h1>Dashboard</h1>
+      <p>Welcome to TechZone Retail Management</p>
+    </div>
+
+    <button class="refresh-button"
+            (click)="loadDashboard()"
+            [disabled]="loading">
+      ↻ Refresh
+    </button>
+  </div>
+
+  <div class="loading" *ngIf="loading">
+    Loading dashboard data...
+  </div>
+
+  <div class="error" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <div class="stats-grid" *ngIf="!loading">
+
+    <article class="stat-card">
+      <div>
+        <p>Total Products</p>
+        <h2>{{ totalProducts | number }}</h2>
+      </div>
+      <span class="stat-icon">▣</span>
+    </article>
+
+    <article class="stat-card">
+      <div>
+        <p>Total Orders</p>
+        <h2>{{ totalOrders | number }}</h2>
+      </div>
+      <span class="stat-icon">♧</span>
+    </article>
+
+    <article class="stat-card">
+      <div>
+        <p>Pending Orders</p>
+        <h2>{{ pendingOrders | number }}</h2>
+      </div>
+      <span class="stat-icon">◷</span>
+    </article>
+
+    <article class="stat-card">
+      <div>
+        <p>Low Stock Items</p>
+        <h2>{{ lowStockItems | number }}</h2>
+      </div>
+      <span class="stat-icon warning-icon">⚠</span>
+      <a routerLink="/inventory" class="card-link">View inventory</a>
+    </article>
+
+  </div>
+
+  <section class="orders-section" *ngIf="!loading">
+
+    <div class="section-heading">
+      <h2>Recent Orders</h2>
+      <a routerLink="/orders">View all orders →</a>
+    </div>
+
+    <div class="table-container">
+
+      <table>
+        <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Customer ID</th>
+          <th>Product ID</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th>Details</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let order of recentOrders">
+          <td>#{{ order.id }}</td>
+          <td>{{ order.customerId }}</td>
+          <td>{{ order.productId }}</td>
+          <td>
+            {{ order.totalAmount | currency:'INR':'symbol':'1.2-2' }}
+          </td>
+          <td>
+              <span class="status"
+                    [ngClass]="order.status?.toLowerCase()">
+                {{ order.status }}
+              </span>
+          </td>
+          <td>
+            {{ order.createdAt
+            ? (order.createdAt | date:'mediumDate')
+            : '—' }}
+          </td>
+          <td>
+            <a [routerLink]="['/orders', order.id]">View</a>
+          </td>
+        </tr>
+
+        <tr *ngIf="recentOrders.length === 0">
+          <td colspan="7" class="empty">
+            No orders available.
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </section>
+
+</section>

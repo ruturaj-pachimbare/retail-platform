@@ -1,0 +1,16 @@
+<section class="page">
+  <div class="heading"><div><h1>Orders</h1><p>Review orders and place an order from your cart.</p></div><button (click)="checkout()" [disabled]="cartEmpty">Place order from cart</button></div>
+  <p class="success" *ngIf="success">{{ success }}</p><p class="error" *ngIf="error">{{ error }}</p>
+  <p *ngIf="loading">Loading orders...</p>
+  <div class="table-wrap" *ngIf="!loading">
+    <table><thead><tr><th>Order ID</th><th>Customer</th><th>Product</th><th>Qty</th><th>Total</th><th>Status</th><th>Created</th><th>Action</th></tr></thead>
+      <tbody><tr *ngFor="let order of orders">
+        <td>#{{ order.id }}</td><td>{{ order.customerId }}</td><td>{{ order.productId }}</td><td>{{ order.quantity }}</td>
+        <td>{{ order.totalAmount | currency:'INR':'symbol':'1.2-2' }}</td><td><span class="status">{{ order.status }}</span></td>
+        <td>{{ order.createdAt ? (order.createdAt | date:'medium') : '—' }}</td>
+        <td><button class="cancel" *ngIf="order.status==='CONFIRMED' || order.status==='PENDING'" (click)="cancel(order)">Cancel</button></td>
+      </tr></tbody>
+    </table>
+    <p *ngIf="orders.length===0">No orders found.</p>
+  </div>
+</section>

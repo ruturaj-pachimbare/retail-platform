@@ -1,0 +1,5 @@
+<section class="page"><a routerLink="/orders">← Back to orders</a><p class="error" *ngIf="error">{{ error }}</p>
+<article class="detail" *ngIf="order"><h1>Order #{{ order.id }}</h1><p>Status: <strong>{{ order.status }}</strong></p>
+<p>Customer ID: {{ order.customerId }}</p><p>Product ID: {{ order.productId }}</p><p>Quantity: {{ order.quantity }}</p>
+<p>Unit price: {{ order.unitPrice | currency:'INR' }}</p><h2>Total: {{ order.totalAmount | currency:'INR' }}</h2>
+<p *ngIf="order.createdAt">Created: {{ order.createdAt | date:'medium' }}</p></article></section>
