@@ -1,0 +1,1 @@
+target/\n.idea/\n*.iml\n.env\n.env.*\n!.env.example\n
