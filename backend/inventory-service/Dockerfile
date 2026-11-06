@@ -1,6 +1,16 @@
-FROM eclipse-temurin:21-jre
+﻿FROM maven:3.9.9-eclipse-temurin-21 AS build
+
 WORKDIR /app
-ARG JAR_FILE=target/inventory-service-0.0.1-SNAPSHOT.jar
-COPY ${JAR_FILE} app.jar
-EXPOSE 8082
+
+COPY pom.xml .
+COPY src ./src
+
+RUN mvn -B -DskipTests package
+
+FROM eclipse-temurin:21-jre
+
+WORKDIR /app
+
+COPY --from=build /app/target/*.jar app.jar
+
 ENTRYPOINT ["java", "-jar", "app.jar"]
