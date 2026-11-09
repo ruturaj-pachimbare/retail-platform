@@ -1,5 +1,5 @@
 
-name: Retail Platform CI
+name: Retail Platform CI-CD
 
 on:
   push:
@@ -14,10 +14,15 @@ on:
 
 permissions:
   contents: read
+  packages: write
 
 jobs:
+
+  # ==========================================
+  # 1. BACKEND BUILD AND TEST
+  # ==========================================
   backend-build:
-    name: Build Spring Boot - ${{ matrix.service }}
+    name: Backend - ${{ matrix.service }}
     runs-on: ubuntu-latest
 
     strategy:
@@ -46,8 +51,12 @@ jobs:
         working-directory: backend/${{ matrix.service }}
         run: mvn -B clean verify
 
+
+  # ==========================================
+  # 2. AUTH SERVICE BUILD AND TEST
+  # ==========================================
   auth-service-test:
-    name: Build and test Auth Service
+    name: Auth Service - Build and Test
     runs-on: ubuntu-latest
 
     services:
@@ -94,8 +103,12 @@ jobs:
         working-directory: backend/auth-service
         run: mvn -B clean verify
 
+
+  # ==========================================
+  # 3. NOTIFICATION SERVICE BUILD AND TEST
+  # ==========================================
   notification-service-test:
-    name: Build and test Notification Service
+    name: Notification Service - Build and Test
     runs-on: ubuntu-latest
 
     services:
@@ -143,8 +156,12 @@ jobs:
         working-directory: backend/notification-service
         run: mvn -B clean verify
 
+
+  # ==========================================
+  # 4. ANGULAR FRONTEND BUILD
+  # ==========================================
   frontend-build:
-    name: Build Angular frontend
+    name: Angular Frontend - Build
     runs-on: ubuntu-latest
 
     steps:
@@ -165,3 +182,74 @@ jobs:
       - name: Build Angular application
         working-directory: frontend/retail-frontend
         run: npm run build -- --configuration production
+
+
+  # ==========================================
+  # 5. DOCKER BUILD AND PUSH TO GHCR
+  # ==========================================
+  docker-publish:
+    name: Docker - ${{ matrix.image }}
+    runs-on: ubuntu-latest
+
+    needs:
+      - backend-build
+      - auth-service-test
+      - notification-service-test
+      - frontend-build
+
+    # Do not publish images for pull requests.
+    if: github.event_name == 'push'
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image: api-gateway
+            context: backend/api-gateway
+
+          - image: auth-service
+            context: backend/auth-service
+
+          - image: config-server
+            context: backend/config-server
+
+          - image: discovery-server
+            context: backend/discovery-server
+
+          - image: product-service
+            context: backend/product-service
+
+          - image: inventory-service
+            context: backend/inventory-service
+
+          - image: order-service
+            context: backend/order-service
+
+          - image: notification-service
+            context: backend/notification-service
+
+          - image: frontend
+            context: frontend/retail-frontend
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./${{ matrix.context }}
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/retail-${{ matrix.image }}:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/retail-${{ matrix.image }}:latest
