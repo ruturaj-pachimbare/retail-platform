@@ -11,7 +11,12 @@ import java.time.Instant;
 public class OrderEventProcessor {
  private static final Logger log=LoggerFactory.getLogger(OrderEventProcessor.class);
  private final ObjectMapper mapper; private final NotificationRepository repository;
- public OrderEventProcessor(ObjectMapper mapper,NotificationRepository repository){this.mapper=mapper;this.repository=repository;}
+
+ public OrderEventProcessor(ObjectMapper mapper, NotificationRepository repository) {
+  this.mapper = mapper.findAndRegisterModules();
+  this.repository = repository;
+ }
+
  @Transactional
  public void process(String raw) {
   try {
